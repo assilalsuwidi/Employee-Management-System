@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Lint (flake8)
+        run: flake8 backend/app --max-line-length=100
+
+      - name: Run tests (unit + integration + security)
+        env:
+          FLASK_CONFIG: testing
+          SECRET_KEY: ci-secret
+          JWT_SECRET_KEY: ci-jwt-secret
+        run: |
+          cd backend
+          python -m pytest ../tests -v
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: cd frontend && npm ci && npm run build
