@@ -209,7 +209,8 @@ export default function Employees() {
       setSuccess("تم حفظ هيكل الراتب بنجاح.");
       setShowSalaryModal(false);
     } catch (err) {
-      setError("فشل حفظ الراتب.");
+      console.error("Error saving salary:", err);
+      setError(err.response?.data?.message || "فشل حفظ الراتب.");
     } finally {
       setLoading(false);
     }
@@ -248,7 +249,8 @@ export default function Employees() {
       setSuccess("تم حفظ قواعد الدوام بنجاح.");
       setShowRulesModal(false);
     } catch (err) {
-      setError("فشل حفظ قواعد الدوام.");
+      console.error("Error saving rules:", err);
+      setError(err.response?.data?.message || "فشل حفظ قواعد الدوام.");
     } finally {
       setLoading(false);
     }
@@ -623,16 +625,16 @@ export default function Employees() {
             </div>
             <form onSubmit={handleSaveSalary}>
               <div className="form-group">
-                <label className="form-label">الراتب الأساسي</label>
-                <input type="number" className="form-control" value={salaryForm.basic_salary} onChange={(e) => setSalaryForm({...salaryForm, basic_salary: e.target.value})} required />
+                <label className="form-label" htmlFor="basic_salary">الراتب الأساسي</label>
+                <input id="basic_salary" type="number" className="form-control" value={salaryForm.basic_salary} onChange={(e) => setSalaryForm({...salaryForm, basic_salary: e.target.value})} required />
               </div>
               <div className="form-group">
-                <label className="form-label">سعر ساعة الإضافي</label>
-                <input type="number" className="form-control" value={salaryForm.overtime_rate} onChange={(e) => setSalaryForm({...salaryForm, overtime_rate: e.target.value})} required />
+                <label className="form-label" htmlFor="overtime_rate">سعر ساعة الإضافي</label>
+                <input id="overtime_rate" type="number" className="form-control" value={salaryForm.overtime_rate} onChange={(e) => setSalaryForm({...salaryForm, overtime_rate: e.target.value})} required />
               </div>
               <div className="form-group" style={{ flexDirection: "row", alignItems: "center" }}>
-                <input type="checkbox" checked={salaryForm.bonus_allowed} onChange={(e) => setSalaryForm({...salaryForm, bonus_allowed: e.target.checked})} style={{ width: "18px", height: "18px" }} />
-                <label className="form-label" style={{ marginRight: "0.5rem" }}>يستحق المكافآت؟</label>
+                <input id="bonus_allowed" type="checkbox" checked={salaryForm.bonus_allowed} onChange={(e) => setSalaryForm({...salaryForm, bonus_allowed: e.target.checked})} style={{ width: "18px", height: "18px" }} />
+                <label className="form-label" htmlFor="bonus_allowed" style={{ marginRight: "0.5rem" }}>يستحق المكافآت؟</label>
               </div>
               <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
                 <button type="submit" className="btn btn-primary" style={{ flex: 1, justifyContent: "center" }} disabled={loading}>{loading ? "جاري الحفظ..." : "حفظ"}</button>
@@ -653,16 +655,16 @@ export default function Employees() {
             </div>
             <form onSubmit={handleSaveRules}>
               <div className="form-group">
-                <label className="form-label">موعد الدخول (مثال: 09:00)</label>
-                <input type="time" className="form-control" value={rulesForm.login_time} onChange={(e) => setRulesForm({...rulesForm, login_time: e.target.value})} required />
+                <label className="form-label" htmlFor="login_time">موعد الدخول (مثال: 09:00)</label>
+                <input id="login_time" type="time" className="form-control" value={rulesForm.login_time} onChange={(e) => setRulesForm({...rulesForm, login_time: e.target.value})} required />
               </div>
               <div className="form-group">
-                <label className="form-label">فترة السماح (بالدقائق)</label>
-                <input type="number" className="form-control" value={rulesForm.grace_period_minutes} onChange={(e) => setRulesForm({...rulesForm, grace_period_minutes: e.target.value})} required />
+                <label className="form-label" htmlFor="grace_period_minutes">فترة السماح (بالدقائق)</label>
+                <input id="grace_period_minutes" type="number" className="form-control" value={rulesForm.grace_period_minutes} onChange={(e) => setRulesForm({...rulesForm, grace_period_minutes: e.target.value})} required />
               </div>
               <div className="form-group">
-                <label className="form-label">غرامة التأخير (لليوم)</label>
-                <input type="number" className="form-control" value={rulesForm.fine_per_day} onChange={(e) => setRulesForm({...rulesForm, fine_per_day: e.target.value})} required />
+                <label className="form-label" htmlFor="fine_per_day">غرامة التأخير (لليوم)</label>
+                <input id="fine_per_day" type="number" className="form-control" value={rulesForm.fine_per_day} onChange={(e) => setRulesForm({...rulesForm, fine_per_day: e.target.value})} required />
               </div>
               <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
                 <button type="submit" className="btn btn-primary" style={{ flex: 1, justifyContent: "center" }} disabled={loading}>{loading ? "جاري الحفظ..." : "حفظ"}</button>

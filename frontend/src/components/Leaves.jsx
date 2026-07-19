@@ -61,7 +61,8 @@ export default function Leaves() {
       setSuccess("تم تحديث حالة الطلب بنجاح.");
       fetchLeaves();
     } catch (err) {
-      setError("فشل تحديث حالة الطلب.");
+      console.error("Error updating leave status:", err);
+      setError(err.response?.data?.message || "فشل تحديث حالة الطلب.");
     }
   };
 
@@ -156,8 +157,8 @@ export default function Leaves() {
             </div>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="form-label">نوع الإجازة</label>
-                <select className="form-control" value={form.leave_type} onChange={(e) => setForm({ ...form, leave_type: e.target.value })} required>
+                <label className="form-label" htmlFor="leave_type">نوع الإجازة</label>
+                <select id="leave_type" className="form-control" value={form.leave_type} onChange={(e) => setForm({ ...form, leave_type: e.target.value })} required>
                   <option value="annual">سنوية</option>
                   <option value="sick">مرضية</option>
                   <option value="emergency">طارئة</option>
@@ -166,17 +167,17 @@ export default function Leaves() {
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <div className="form-group">
-                  <label className="form-label">من تاريخ</label>
-                  <input type="date" className="form-control" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} required />
+                  <label className="form-label" htmlFor="start_date">من تاريخ</label>
+                  <input id="start_date" type="date" className="form-control" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} required />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">إلى تاريخ</label>
-                  <input type="date" className="form-control" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} required />
+                  <label className="form-label" htmlFor="end_date">إلى تاريخ</label>
+                  <input id="end_date" type="date" className="form-control" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} required />
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">السبب (اختياري)</label>
-                <textarea className="form-control" rows="3" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} />
+                <label className="form-label" htmlFor="reason">السبب (اختياري)</label>
+                <textarea id="reason" className="form-control" rows="3" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} />
               </div>
               <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
                 <button type="submit" className="btn btn-primary" style={{ flex: 1, justifyContent: "center" }} disabled={loading}>

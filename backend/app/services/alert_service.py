@@ -32,9 +32,9 @@ class AlertService:
             
             server.send_message(msg)
             server.quit()
-        except Exception as e:
+        except Exception:
             # Catch all exceptions so the background thread doesn't crash the app
-            logging.error(f"Failed to send security alert for '{action}': {str(e)}")
+            logging.exception(f"Failed to send security alert for '{action}'")
 
     @staticmethod
     def send_security_alert(action, details):
@@ -63,5 +63,5 @@ class AlertService:
             # Daemon threads will shut down immediately when the main program exits
             thread.daemon = True
             thread.start()
-        except Exception as e:
-            logging.error(f"AlertService: Failed to start alert thread: {str(e)}")
+        except Exception:
+            logging.exception("AlertService: Failed to start alert thread")

@@ -7,7 +7,7 @@ from app.extensions import db, jwt, cors, limiter, talisman
 def create_app(config_name="default"):
     """Application Factory Pattern -- نفس النمط المستخدم في مشروع
     المهندس (run.py -> create_app(os.getenv('FLASK_CONFIG', 'default'))).
-    يسمح هذا النمط بإنشاء نسخ متعددة من التطبيق (للتطوير / للاختبار /
+    يسمح هذا النمط بإنشاء نسخ متعhghددة من التطبيق (للتطوير / للاختبار /
     للإنتاج) بإعدادات مختلفة دون تكرار الكود."""
 
     app = Flask(__name__, instance_relative_config=True)  # NOSONAR - CSRF is handled by JWT/API design
