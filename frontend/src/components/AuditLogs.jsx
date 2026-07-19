@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getAuditLogs } from "../services/apiService";
 
@@ -10,7 +10,7 @@ export default function AuditLogs() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     if (!isAdmin) return;
     setError("");
     setLoading(true);
@@ -23,11 +23,11 @@ export default function AuditLogs() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isAdmin]);
 
   useEffect(() => {
     fetchLogs();
-  }, [role]);
+  }, [fetchLogs]);
 
   if (!isAdmin) {
     return (

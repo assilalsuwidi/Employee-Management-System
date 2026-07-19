@@ -198,3 +198,14 @@ CREATE TABLE audit_logs (
 			INDEX idx_created_at (created_at),
 			FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE SET NULL
 		);
+
+-- =========================================================
+-- جديد: جدول حظر الرموز (Token Blocklist)
+-- لمنع استخدام الرموز بعد تسجيل الخروج (S-SDLC)
+-- =========================================================
+CREATE TABLE token_blocklist (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jti VARCHAR(36) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_jti (jti)
+);

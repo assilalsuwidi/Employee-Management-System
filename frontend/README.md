@@ -1,16 +1,64 @@
-# React + Vite
+# الواجهة الأمامية (Frontend) - نظام إدارة الموظفين
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+هذا المجلد يحتوي على الواجهة الأمامية لنظام إدارة الموظفين، والمبنية باستخدام **React.js** مع **Vite** كأداة بناء.
 
-Currently, two official plugins are available:
+## الميزات الرئيسية
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+*   **لوحة تحكم تفاعلية:** عرض بيانات الموظفين، الأقسام، الحضور، المهام، والرواتب.
+*   **إدارة المستخدمين والأدوار:** واجهات لإدارة المستخدمين وصلاحياتهم (Admin, HR, Employee).
+*   **إدارة المهام:** إنشاء، تعيين، وتتبع تقدم المهام للموظفين.
+*   **إدارة الرواتب:** عرض سجلات الرواتب وتفاصيلها.
+*   **تسجيل الدخول الآمن:** استخدام JWT للمصادقة.
 
-## React Compiler
+## المكدس التقني
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **إطار العمل:** React.js
+*   **أداة البناء:** Vite
+*   **إدارة الحالة:** Context API (أو Redux/Zustand إذا تطلب الأمر تعقيدًا أكبر)
+*   **الشبكة:** Axios (للتواصل مع الواجهة الخلفية)
+*   **التصميم:** Tailwind CSS (أو أي مكتبة تصميم أخرى مستخدمة)
 
-## Expanding the Oxlint configuration
+## التشغيل محليًا
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+للتشغيل المحلي للواجهة الأمامية، اتبع الخطوات التالية:
+
+1.  **انتقل إلى مجلد الواجهة الأمامية:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **تثبيت التبعيات:**
+    ```bash
+    npm install
+    ```
+
+3.  **تشغيل خادم التطوير:**
+    ```bash
+    npm run dev
+    ```
+
+    سيتم تشغيل التطبيق على `http://localhost:5173` (أو منفذ آخر متاح).
+
+## البناء للإنتاج
+
+لبناء نسخة جاهزة للإنتاج من الواجهة الأمامية:
+
+1.  **انتقل إلى مجلد الواجهة الأمامية:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **تشغيل أمر البناء:**
+    ```bash
+    npm run build
+    ```
+
+    سيتم إنشاء ملفات الإنتاج في مجلد `dist/`.
+
+## التواصل مع الواجهة الخلفية
+
+تتواصل الواجهة الأمامية مع الواجهة الخلفية (Flask API) عبر `axiosClient.js` و `apiService.js` في مجلد `src/services/`. تأكد من أن الواجهة الخلفية تعمل على المنفذ الصحيح (عادةً `http://localhost:5000`) أو قم بتحديث إعدادات `VITE_API_BASE_URL` في ملف `.env` الخاص بالواجهة الأمامية إذا لزم الأمر.
+
+## المساهمة
+
+للمساهمة في تطوير الواجهة الأمامية، يرجى مراجعة دليل المطور العام للمشروع واتباع إرشادات الكود المحددة.

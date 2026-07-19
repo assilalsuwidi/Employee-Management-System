@@ -33,6 +33,9 @@ class Employee(db.Model):
     department = db.relationship("Department", back_populates="employees")
     user = db.relationship("User", back_populates="employee", uselist=False)
 
+    def __init__(self, **kwargs):
+        super(Employee, self).__init__(**kwargs)
+
     def to_dict(self):
         return {
             "id": self.id,

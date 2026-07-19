@@ -97,7 +97,7 @@ export default function Departments() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {error && <div className="alert alert-danger">{error}</div>}
-      {success && <div className="alert alert-danger" style={{ background: "rgba(16, 185, 129, 0.1)", borderColor: "rgba(16, 185, 129, 0.2)", color: "#a7f3d0" }}>{success}</div>}
+      {success && <div className="alert alert-success">{success}</div>}
 
       {/* Inline Form (Only for Admins) */}
       {isAdmin ? (

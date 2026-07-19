@@ -7,5 +7,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
 
+# إنشاء مستخدم غير جذري (appuser) لأسباب أمنية (Best Practice)
+# وتغيير ملكية مجلد التطبيق ليتمكن من الكتابة (مهم لقاعدة بيانات SQLite)
+RUN groupadd -r appuser && useradd -r -g appuser appuser \
+    && chown -R appuser:appuser /app
+
+USER appuser
+
 EXPOSE 5000
-CMD ["python", "run.py"]
+# الإصلاح: كان `python run.py` يشغّل خادم Flask التطويري المدمج، وهو
+# غير مصمم للإنتاج (Flask نفسها تحذّر من استخدامه خارج التطوير). الآن
+# يُستخدم gunicorn بعدة workers -- ما يجعل RATELIMIT_STORAGE_URI=redis
+# ضروريًا فعليًا (بدل memory:// التي تنكسر مع تعدد الـ workers).
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]

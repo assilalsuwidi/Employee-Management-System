@@ -6,7 +6,7 @@
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-نظام إدارة موظفين احترافي وآمن، مبني من الصفر استناداً إلى منهجية **تطوير البرمجيات الآمنة (Secure-SDLC)**. يركز المشروع على الأمان في جميع المراحل: التخطيط، التصميم، التطوير، والاختبار، مع تطبيق أدوات فحص الأمان (SAST/DAST) والـ CI/CD.
+نظام إدارة موظفين احترافي وآمن، مبني من الصفر استناداً إلى منهجية **تطوير البرمجيات الآمنة (Secure-SDLC)**. يركز المشروع على الأمان في جميع المراحل: التخطيط، التصميم، التطوير، والاختبار، مع تطبيق أدوات فحص الأمان (SAST/DAST) والـ CI/CD. تم تعزيز المشروع بميزات أمنية ووظيفية جديدة لضمان التميز.
 
 ---
 
@@ -14,17 +14,17 @@
 تم بناء هذا المشروع بمرور كامل على مراحل الـ S-SDLC:
 1. **المتطلبات الأمنية:** تحديد متطلبات الأمان (السرية، السلامة، التوافر).
 2. **التصميم الآمن:** استخدام نمذجة التهديدات (STRIDE/DREAD) وتوثيق الهيكلية الآمنة (راجع مجلد `docs/`).
-3. **التطوير الآمن:** تطبيق مبادئ أمان الكود، التحقق من المدخلات (Input Validation)، وإدارة الصلاحيات (RBAC).
-4. **الاختبار المستمر:** دمج أدوات SAST (مثل Bandit) و DAST للتحقق من خلو النظام من الثغرات الشائعة (OWASP Top 10).
-5. **النشر الآمن:** النشر كحاويات Docker معزولة.
+3. **التطوير الآمن:** تطبيق مبادئ أمان الكود، التحقق من المدخلات (Input Validation)، إدارة الصلاحيات (RBAC)، وإزالة بيانات المسؤول الافتراضية.
+4. **الاختبار المستمر:** دمج أدوات SAST (مثل Bandit و Safety) و DAST (مثل OWASP ZAP) في خط أنابيب CI/CD للتحقق من خلو النظام من الثغرات الشائعة (OWASP Top 10).
+5. **النشر الآمن:** النشر كحاويات Docker معزولة، مع تفعيل حماية رؤوس HTTP (Flask-Talisman) وقائمة حظر رموز JWT.
 
 ## 🛠 المكدس التقني (Tech Stack)
 
-- **Backend:** Python (Flask) + SQLAlchemy + JWT + MySQL
+- **Backend:** Python (Flask) + SQLAlchemy + JWT (مع Blocklisting) + Flask-Talisman + MySQL
 - **Frontend:** React (Vite)
 - **Database:** MySQL 8
 - **Auth:** JWT (Flask-JWT-Extended) + Role-Based Access Control (RBAC) + bcrypt
-- **DevOps & Security:** Docker, Docker Compose, Bandit (SAST), OWASP ZAP (DAST)
+- **DevOps & Security:** Docker, Docker Compose, Bandit (SAST), Safety (Dependency Scanning), OWASP ZAP (DAST), GitHub Actions (CI/CD مع SAST و Dependency Scanning)
 
 ## 📂 الهيكلية (Architecture)
 

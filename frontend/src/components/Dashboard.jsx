@@ -6,6 +6,7 @@ import Groups from "./Groups";
 import Attendance from "./Attendance";
 import Payroll from "./Payroll";
 import AuditLogs from "./AuditLogs";
+import Tasks from "./Tasks";
 import { getEmployees, getDepartments } from "../services/apiService";
 
 export default function Dashboard() {
@@ -105,6 +106,15 @@ export default function Dashboard() {
               🕒 الحضور والغياب
             </button>
           </li>
+          <li>
+            <button
+              className={`nav-link ${activeTab === "tasks" ? "active" : ""}`}
+              onClick={() => setActiveTab("tasks")}
+              style={{ background: "none", border: "none", width: "100%", textAlign: "right" }}
+            >
+              📋 المهام والمشاريع
+            </button>
+          </li>
           {isAdminOrHr && (
             <li>
               <button
@@ -171,6 +181,7 @@ export default function Dashboard() {
             {activeTab === "groups" && "مجموعات العمل"}
             {activeTab === "attendance" && "تسجيل الحضور اليومي"}
             {activeTab === "payroll" && "إدارة شؤون الرواتب"}
+            {activeTab === "tasks" && "إدارة المهام والمشاريع"}
             {activeTab === "audit" && "سجل التدقيق والمتابعة الأمنية"}
           </h1>
         </header>
@@ -266,6 +277,12 @@ export default function Dashboard() {
         {activeTab === "payroll" && (
           <div className="tab-content">
             <Payroll />
+          </div>
+        )}
+
+        {activeTab === "tasks" && (
+          <div className="tab-content">
+            <Tasks />
           </div>
         )}
 

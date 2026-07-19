@@ -22,6 +22,12 @@ jobs:
       - name: Lint (flake8)
         run: flake8 backend/app --max-line-length=100
 
+      - name: SAST (Bandit)
+        run: bandit -r backend/app -v
+
+      - name: Dependency Check (Safety)
+        run: safety check
+
       - name: Run tests (unit + integration + security)
         env:
           FLASK_CONFIG: testing
@@ -38,4 +44,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: cd frontend && npm ci && npm run build
+      - run: cd frontend && npm ci
+      - name: Frontend Security Audit
+        run: cd frontend && npm audit --audit-level=high
+      - run: cd frontend && npm run build

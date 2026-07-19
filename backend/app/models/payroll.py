@@ -1,12 +1,14 @@
 from datetime import datetime
 from app.extensions import db
 
+EMPLOYEES_ID_FK = "employees.id"
+
 
 class LoginRule(db.Model):
     __tablename__ = "login_rules"
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(
-        db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"),
+        db.Integer, db.ForeignKey(EMPLOYEES_ID_FK, ondelete="CASCADE"),
         unique=True, nullable=False,
     )
     login_time = db.Column(db.Time, nullable=False)
@@ -17,7 +19,7 @@ class LoginRule(db.Model):
 class LateFine(db.Model):
     __tablename__ = "late_fines"
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"))
+    employee_id = db.Column(db.Integer, db.ForeignKey(EMPLOYEES_ID_FK, ondelete="CASCADE"))
     attendance_id = db.Column(db.Integer, db.ForeignKey("attendance.id", ondelete="CASCADE"))
     date = db.Column(db.Date)
     fine_amount = db.Column(db.Numeric(10, 2))
@@ -29,7 +31,7 @@ class SalaryStructure(db.Model):
     __tablename__ = "salary_structure"
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(
-        db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"),
+        db.Integer, db.ForeignKey(EMPLOYEES_ID_FK, ondelete="CASCADE"),
         unique=True, nullable=False,
     )
     basic_salary = db.Column(db.Numeric(10, 2), nullable=False)
@@ -42,7 +44,7 @@ class Payroll(db.Model):
     __tablename__ = "payroll"
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(
-        db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"), nullable=False
+        db.Integer, db.ForeignKey(EMPLOYEES_ID_FK, ondelete="CASCADE"), nullable=False
     )
     month = db.Column(db.SmallInteger, nullable=False)
     year = db.Column(db.Integer, nullable=False)

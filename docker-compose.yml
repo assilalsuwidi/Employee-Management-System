@@ -10,8 +10,20 @@ services:
       - mysql_data:/var/lib/mysql
       - ./database/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./database/seeds/initial_data.sql:/docker-entrypoint-initdb.d/2-seeds.sql
-    ports:
-      - "3306:3306"
+    # الإصلاح: كان منفذ MySQL (3306) منشورًا على شبكة المضيف مباشرة، وهو
+    # غير ضروري أبداً -- الـ backend يتصل بـ "db" عبر شبكة Docker الداخلية
+    # فقط. نشر هذا المنفذ خارجًا يوسّع سطح الهجوم بلا أي فائدة تشغيلية.
+    # للوصول المحلي وقت التطوير (عبر أداة عميل MySQL مثلاً)، استخدم
+    # `docker compose exec db mysql ...` بدل نشر المنفذ.
+
+  # الإصلاح: gunicorn الآن يشغّل 4 workers منفصلة (كل واحد بذاكرته
+  # الخاصة) بدل عملية Flask تطويرية واحدة. RATELIMIT_STORAGE_URI=memory://
+  # كانت ستعني أن حد "5 محاولات/دقيقة" على /login يتضاعف فعليًا x4 لأن كل
+  # worker يعدّ بمعزل عن الآخرين. Redis مخزن مشترك يحل هذا.
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
 
   backend:
     build:
@@ -20,19 +32,23 @@ services:
     env_file: backend/.env
     environment:
       - DATABASE_URL=mysql+pymysql://root:${DB_ROOT_PASSWORD:-root_password}@db/ems_db
+      - RATELIMIT_STORAGE_URI=redis://redis:6379/0
     ports:
       - "5000:5000"
     depends_on:
       - db
+      - redis
 
   frontend:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - backend
 
+
 volumes:
   mysql_data:
+  redis_data:

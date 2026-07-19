@@ -628,6 +628,12 @@ body {
   color: var(--alert-danger-color, #ffffff);
 }
 
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+}
+
 /* Grid Layout for Cards */
 .employee-grid {
   display: grid;

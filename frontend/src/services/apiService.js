@@ -70,6 +70,20 @@ export async function createGroup(groupName, description, employeeIds) {
   return data;
 }
 
+export async function updateGroup(id, groupName, description, employeeIds) {
+  const { data } = await axiosClient.put(`/groups/${id}`, {
+    group_name: groupName,
+    description,
+    employee_ids: employeeIds,
+  });
+  return data;
+}
+
+export async function deleteGroup(id) {
+  const { data } = await axiosClient.delete(`/groups/${id}`);
+  return data;
+}
+
 // Audit Logs API
 export async function getAuditLogs() {
   const { data } = await axiosClient.get("/audit");
@@ -84,16 +98,93 @@ export async function checkInAttendance(employeeId) {
   return data;
 }
 
+export async function getAttendanceReports() {
+  const { data } = await axiosClient.get("/attendance/reports");
+  return data.data;
+}
+
 // Payroll API
-export async function generatePayroll(employeeId) {
+export async function generatePayroll(employeeId, month, year, bonus = 0, overtimeHours = 0, deduction = 0) {
   const { data } = await axiosClient.post("/payroll/generate", {
     employee_id: employeeId,
+    month,
+    year,
+    bonus,
+    overtime_hours: overtimeHours,
+    deduction
   });
   return data;
+}
+
+export async function getPayrollHistory(employeeId) {
+  const { data } = await axiosClient.get(`/payroll/history/${employeeId}`);
+  return data.data;
 }
 
 // Tasks API
 export async function getTasks() {
   const { data } = await axiosClient.get("/tasks");
   return data.data;
+}
+
+export async function createTask(groupId, title, note, deadline) {
+  const { data } = await axiosClient.post("/tasks", {
+    group_id: groupId,
+    title,
+    note,
+    deadline
+  });
+  return data;
+}
+
+export async function assignTask(taskId, employeeId) {
+  const { data } = await axiosClient.post(`/tasks/${taskId}/assign`, {
+    employee_id: employeeId
+  });
+  return data;
+}
+
+export async function updateTaskProgress(taskId, employeeId, progress, note) {
+  const { data } = await axiosClient.post(`/tasks/${taskId}/progress`, {
+    employee_id: employeeId,
+    progress,
+    note
+  });
+  return data;
+}
+
+export async function getEmployeeSalary(id) {
+  const { data } = await axiosClient.get(`/employees/${id}/salary`);
+  return data.data;
+}
+
+export async function updateEmployeeSalary(id, salaryData) {
+  const { data } = await axiosClient.put(`/employees/${id}/salary`, salaryData);
+  return data;
+}
+
+export async function getEmployeeRules(id) {
+  const { data } = await axiosClient.get(`/employees/${id}/rules`);
+  return data.data;
+}
+
+export async function updateEmployeeRules(id, rulesData) {
+  const { data } = await axiosClient.put(`/employees/${id}/rules`, rulesData);
+  return data;
+}
+
+// Leaves API
+export async function getLeaves() {
+  const { data } = await axiosClient.get("/leaves");
+  return data.data;
+}
+
+export async function requestLeave(leaveData) {
+  const { data } = await axiosClient.post("/leaves", leaveData);
+  return data;
+}
+
+export async function updateLeaveStatus(id, status) {
+  const { data } = await axiosClient.put(`/leaves/${id}/status`, { status });
+  return data;
 }

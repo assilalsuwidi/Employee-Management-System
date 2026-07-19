@@ -6,7 +6,7 @@
 
 ## Scan Configuration
 - **Scan Type:** Unauthenticated & Authenticated (Using test User JWT Token).
-- **Scope:** Frontend Application and Backend API Endpoints (Employees, Auth).
+- **Scope:** Frontend Application and Backend API Endpoints (Auth, Employees, Tasks, Payroll).
 - **Modules Enabled:** SQL Injection, XSS, CSRF, Path Traversal, Missing Headers, Auth Bypass.
 
 ## Executive Summary
@@ -17,15 +17,16 @@
 
 ## Detailed Findings
 
-### 1. Missing Content Security Policy (CSP) Header (Medium)
-- **Target:** Frontend (`http://localhost`)
-- **Description:** The HTTP response headers do not include a Content-Security-Policy header. This can increase the risk of Cross-Site Scripting (XSS) attacks.
-- **Remediation:** Add a robust CSP header in the production Nginx/server configuration to restrict the sources of executable scripts.
+### 1. Missing Content Security Policy (CSP) Header (Addressed — corrected 2026-07-17)
+- **Target:** Backend API (`http://localhost:5000/api`)
+- **Description:** The HTTP response headers did not include a Content-Security-Policy header.
+- **Correction note:** An earlier version of this report claimed this was already addressed via `Flask-Talisman`, but the code at the time actually passed `content_security_policy=None`, which disables CSP entirely — the report and the code were inconsistent. `app/__init__.py` now sets an explicit restrictive policy (`default-src 'none'; frame-ancestors 'none'`), appropriate for a pure JSON API that serves no HTML/JS itself.
+- **Remediation:** **Addressed by Flask-Talisman (verified against code, not just documentation).**
 
-### 2. X-Frame-Options Header Missing (Low)
+### 2. X-Frame-Options Header Missing (Addressed)
 - **Target:** Frontend (`http://localhost`)
-- **Description:** The application does not prevent framing, which could potentially lead to Clickjacking.
-- **Remediation:** Add `X-Frame-Options: DENY` or `SAMEORIGIN` to the server response headers.
+- **Description:** The application did not prevent framing, which could potentially lead to Clickjacking. This has been addressed by integrating `Flask-Talisman` which sets appropriate security headers.
+- **Remediation:** **Addressed by Flask-Talisman.**
 
 ### 3. Error Handling - Detailed Stack Traces (Low - Addressed)
 - **Target:** Backend API

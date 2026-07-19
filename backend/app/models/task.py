@@ -1,6 +1,8 @@
 from datetime import datetime
 from app.extensions import db
 
+TASKS_ID_FK = "tasks.id"
+
 
 class Task(db.Model):
     __tablename__ = "tasks"
@@ -16,7 +18,7 @@ class Task(db.Model):
 class TaskAssignment(db.Model):
     __tablename__ = "task_assignments"
     id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.Integer, db.ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey(TASKS_ID_FK, ondelete="CASCADE"), nullable=False)
     employee_id = db.Column(
         db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"), nullable=False
     )
@@ -26,7 +28,7 @@ class TaskAssignment(db.Model):
 class TaskProgress(db.Model):
     __tablename__ = "task_progress"
     id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.Integer, db.ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey(TASKS_ID_FK, ondelete="CASCADE"), nullable=False)
     employee_id = db.Column(
         db.Integer, db.ForeignKey("employees.id", ondelete="CASCADE"), nullable=False
     )
@@ -38,6 +40,6 @@ class TaskProgress(db.Model):
 class TaskFile(db.Model):
     __tablename__ = "task_files"
     id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.Integer, db.ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey(TASKS_ID_FK, ondelete="CASCADE"), nullable=False)
     file_path = db.Column(db.String(255), nullable=False)
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)

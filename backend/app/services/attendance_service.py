@@ -1,6 +1,7 @@
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from app.extensions import db
 from app.models.attendance import Attendance, Holiday, Weekend
+from app.models.payroll import LoginRule
 
 def record_attendance(employee_id: int):
     today = date.today()
@@ -18,9 +19,20 @@ def record_attendance(employee_id: int):
     day_name = today.strftime("%A")
     is_weekend = Weekend.query.filter_by(day_of_week=day_name).first() is not None
     
-    # Check if late (Assuming 09:00 AM is the standard start time)
-    is_late = now_time > time(9, 0)
-    late_fine = 50.0 if is_late else 0.0
+    # Check LoginRule for late calculation
+    rule = LoginRule.query.filter_by(employee_id=employee_id).first()
+    if rule:
+        # Combine with today's date to safely add the grace period
+        base_datetime = datetime.combine(today, rule.login_time)
+        allowed_datetime = base_datetime + timedelta(minutes=rule.grace_period_minutes)
+        allowed_time = allowed_datetime.time()
+        
+        is_late = now_time > allowed_time
+        late_fine = float(rule.fine_per_day) if is_late else 0.0
+    else:
+        # Fallback to defaults if HR hasn't defined a rule for this employee yet
+        is_late = now_time > time(9, 0)
+        late_fine = 50.0 if is_late else 0.0
     
     record = Attendance(
         employee_id=employee_id,

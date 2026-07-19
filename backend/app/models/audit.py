@@ -20,3 +20,4 @@ class AuditLog(db.Model):
     ip_address = db.Column(db.String(45))
     metadata_json = db.Column(db.Text)                       # سياق إضافي اختياري
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+

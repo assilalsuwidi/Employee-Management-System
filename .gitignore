@@ -1,0 +1,31 @@
+# IDE / OS Files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+Thumbs.db
+
+# Virtual Environments
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+
+# Environment Variables
+.env
+.env.local
+
+# Docker
+docker/certs/
+
+# Project Specific
+zap-reports/
+zap-reports2/
+.pytest_cache/

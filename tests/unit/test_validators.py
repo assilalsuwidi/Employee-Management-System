@@ -1,6 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "backend"))
 
+# pyrefly: ignore [missing-import]
 from app.utils.validators import is_valid_email, validate_password_strength
 
 
