@@ -34,6 +34,9 @@ def login():
     # على قراءته). الآن يُوضَع في كوكي httpOnly لا يصل إليه JavaScript
     # إطلاقًا. access_token وحده يبقى بالجسم لأن الواجهة تحتفظ به في
     # الذاكرة فقط (React state) لا في أي تخزين دائم بالمتصفح.
+    first_name = user.employee.first_name if user.employee else user.username
+    last_name = user.employee.last_name if user.employee else ""
+
     response = jsonify(
         success=True,
         message="Login successful",
@@ -41,6 +44,8 @@ def login():
         role=user.role,
         user_id=user.id,
         employee_id=user.employee_id,
+        first_name=first_name,
+        last_name=last_name,
     )
     set_refresh_cookies(response, refresh_token)
     return response
@@ -102,12 +107,17 @@ def refresh():
     new_access_token, new_refresh_token = AuthService.issue_tokens(user)
     db.session.commit()
 
+    first_name = user.employee.first_name if user.employee else user.username
+    last_name = user.employee.last_name if user.employee else ""
+
     response = jsonify(
         success=True,
         access_token=new_access_token,
         role=user.role,
         user_id=user.id,
         employee_id=user.employee_id,
+        first_name=first_name,
+        last_name=last_name,
     )
     set_refresh_cookies(response, new_refresh_token)
     return response

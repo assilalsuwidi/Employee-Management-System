@@ -7,6 +7,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [role, setRole] = useState(null);
+  const [userName, setUserName] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // الإصلاح (تخزين التوكن): access_token لم يعد يُخزَّن على القرص، فهو
   // غير موجود في الذاكرة عند أول تحميل للصفحة حتى لو كان المستخدم فعليًا
@@ -18,6 +19,7 @@ export function AuthProvider({ children }) {
     authService.restoreSession().then((data) => {
       if (data) {
         setRole(data.role);
+        setUserName(`${data.first_name} ${data.last_name}`.trim());
         setIsAuthenticated(true);
       }
       setRestoring(false);
@@ -27,6 +29,7 @@ export function AuthProvider({ children }) {
   const login = async (username, password) => {
     const data = await authService.login(username, password);
     setRole(data.role);
+    setUserName(`${data.first_name} ${data.last_name}`.trim());
     setIsAuthenticated(true);
     return data;
   };
@@ -34,12 +37,13 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     await authService.logout();
     setRole(null);
+    setUserName("");
     setIsAuthenticated(false);
   };
 
   const contextValue = useMemo(
-    () => ({ role, isAuthenticated, restoring, login, logout }),
-    [role, isAuthenticated, restoring]
+    () => ({ role, userName, isAuthenticated, restoring, login, logout }),
+    [role, userName, isAuthenticated, restoring]
   );
 
   return (

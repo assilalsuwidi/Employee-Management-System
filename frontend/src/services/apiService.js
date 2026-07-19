@@ -104,14 +104,15 @@ export async function getAttendanceReports() {
 }
 
 // Payroll API
-export async function generatePayroll(employeeId, month, year, bonus = 0, overtimeHours = 0, deduction = 0) {
+export async function generatePayroll(employeeId, month, year, bonus = 0, overtimeHours = 0, deduction = 0, isPreview = false) {
   const { data } = await axiosClient.post("/payroll/generate", {
     employee_id: employeeId,
     month,
     year,
     bonus,
     overtime_hours: overtimeHours,
-    deduction
+    deduction,
+    preview: isPreview
   });
   return data;
 }

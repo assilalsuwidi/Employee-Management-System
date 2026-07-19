@@ -7,14 +7,22 @@ import Attendance from "./Attendance";
 import Payroll from "./Payroll";
 import AuditLogs from "./AuditLogs";
 import Tasks from "./Tasks";
+import Leaves from "./Leaves";
 import { getEmployees, getDepartments } from "../services/apiService";
 
 export default function Dashboard() {
-  const { logout, role } = useAuth();
+  const { logout, role, userName } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState({ employeesCount: 0, deptsCount: 0 });
   const isAdmin = role === "admin";
   const isAdminOrHr = role === "admin" || role === "hr";
+
+  let avatarLetter = "U";
+  if (userName) {
+    avatarLetter = userName.charAt(0).toUpperCase();
+  } else if (role) {
+    avatarLetter = role.charAt(0).toUpperCase();
+  }
 
   const fetchStats = async () => {
     try {
@@ -115,6 +123,15 @@ export default function Dashboard() {
               📋 المهام والمشاريع
             </button>
           </li>
+          <li>
+            <button
+              className={`nav-link ${activeTab === "leaves" ? "active" : ""}`}
+              onClick={() => setActiveTab("leaves")}
+              style={{ background: "none", border: "none", width: "100%", textAlign: "right" }}
+            >
+              📅 إدارة الإجازات
+            </button>
+          </li>
           {isAdminOrHr && (
             <li>
               <button
@@ -155,9 +172,9 @@ export default function Dashboard() {
           </div>
 
           <div className="user-profile">
-            <div className="avatar">{role ? role[0].toUpperCase() : "U"}</div>
+            <div className="avatar">{avatarLetter}</div>
             <div className="user-info">
-              <span className="user-name">مستخدم النظام</span>
+              <span className="user-name">{userName || "مستخدم النظام"}</span>
               <span className="user-role badge badge-purple">{role}</span>
             </div>
           </div>
@@ -191,7 +208,7 @@ export default function Dashboard() {
             {/* Overview Banner */}
             <div className="glass-panel" style={{ padding: "2.5rem", borderRadius: "20px" }}>
               <h2 style={{ fontSize: "1.75rem", marginBottom: "0.5rem" }}>
-                مرحباً بك في نظام إدارة الموظفين الآمن
+                مرحباً بك{userName ? `، ${userName}` : ''} في نظام إدارة الموظفين الآمن
               </h2>
               <p style={{ color: "var(--text-secondary)", lineHeight: "1.6" }}>
                 هذه الواجهة تم ربطها بالكامل مع بيئة الـ Flask Backend الآمنة وقاعدة البيانات المشفرة. 
@@ -283,6 +300,12 @@ export default function Dashboard() {
         {activeTab === "tasks" && (
           <div className="tab-content">
             <Tasks />
+          </div>
+        )}
+
+        {activeTab === "leaves" && (
+          <div className="tab-content">
+            <Leaves />
           </div>
         )}
 
