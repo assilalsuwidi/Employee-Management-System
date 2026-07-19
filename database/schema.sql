@@ -209,3 +209,20 @@ CREATE TABLE token_blocklist (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_jti (jti)
 );
+
+-- =========================================================
+-- جدول طلبات الإجازات (Leave Requests)
+-- =========================================================
+CREATE TABLE leave_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    leave_type ENUM('annual', 'sick', 'unpaid', 'emergency') DEFAULT 'annual',
+    reason TEXT,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    reviewer_id INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE SET NULL
+);
